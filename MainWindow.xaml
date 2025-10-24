@@ -1,0 +1,288 @@
+﻿<Window x:Class="CMCS_Prototype.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Contract Monthly Claim System" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="MinWidth" Value="80"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="0,2"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#2E86AB" Padding="15">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="📋" FontSize="20" Margin="0,0,10,0"/>
+                <TextBlock Text="Contract Monthly Claim System" 
+                          Foreground="White" FontSize="20" FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <TabControl Grid.Row="1" Margin="10">
+
+            <!-- Lecturer Tab -->
+            <TabItem Header="📝 Lecturer Portal">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Submit Monthly Claim" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                        <!-- Claim Form -->
+                        <GroupBox Header="Claim Details">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Month:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Row="0" Grid.Column="1" Margin="5" Height="25"
+                                          x:Name="cmbMonth" IsEditable="True">
+                                    <ComboBoxItem Content="January"/>
+                                    <ComboBoxItem Content="February"/>
+                                    <ComboBoxItem Content="March"/>
+                                    <ComboBoxItem Content="April"/>
+                                    <ComboBoxItem Content="May"/>
+                                    <ComboBoxItem Content="June"/>
+                                    <ComboBoxItem Content="July"/>
+                                    <ComboBoxItem Content="August"/>
+                                    <ComboBoxItem Content="September"/>
+                                    <ComboBoxItem Content="October"/>
+                                    <ComboBoxItem Content="November"/>
+                                    <ComboBoxItem Content="December"/>
+                                </ComboBox>
+
+                                <TextBlock Text="Year:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Height="25"
+                                         x:Name="txtYear" Text="2024"/>
+
+                                <TextBlock Text="Total Hours:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Height="25"
+                                         x:Name="txtHours" Text="0" TextChanged="TxtHours_TextChanged"/>
+
+                                <TextBlock Text="Hourly Rate (R):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Height="25"
+                                         x:Name="txtRate" Text="150" IsReadOnly="True" Background="#F5F5F5"/>
+
+                                <TextBlock Text="Notes:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Top"/>
+                                <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Height="60"
+                                         x:Name="txtNotes" TextWrapping="Wrap" AcceptsReturn="True"
+                                         VerticalScrollBarVisibility="Auto"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!-- Document Upload -->
+                        <GroupBox Header="📎 Supporting Documents">
+                            <StackPanel>
+                                <TextBlock Text="Uploaded Documents:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <ListBox x:Name="lstDocuments" Height="120" Margin="0,0,0,10"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="2">
+                                                <TextBlock Text="📄" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding FileName}" VerticalAlignment="Center"/>
+                                                <TextBlock Text=" (" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding FileSize}" VerticalAlignment="Center"/>
+                                                <TextBlock Text=")" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="📤 Upload Document" Width="140" Height="30"
+                                            Click="BtnUploadDocument_Click" Background="#2E86AB" Foreground="White"/>
+                                    <Button Content="🗑️ Remove" Width="100" Height="30"
+                                            Click="BtnRemoveDocument_Click" Background="#A23B72" Foreground="White"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+
+                        <!-- Action Buttons -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="✅ Submit Claim" Width="120" Height="35" 
+                                    Background="#27AE60" Foreground="White" FontWeight="Bold"
+                                    Click="BtnSubmitClaim_Click"/>
+                            <Button Content="🔄 Clear Form" Width="120" Height="35" 
+                                    Background="#E67E22" Foreground="White" FontWeight="Bold"
+                                    Click="BtnClearForm_Click" Margin="20,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- Status Tracking Section -->
+                        <GroupBox Header="🔍 Track Claim Status" Margin="0,20,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Select Claim to Track:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <ComboBox x:Name="cmbTrackClaims" Height="30" Margin="0,0,0,10"
+                                          DisplayMemberPath="TrackDisplay"
+                                          SelectionChanged="CmbTrackClaims_SelectionChanged"/>
+
+                                <ProgressBar x:Name="pbStatus" Height="20" Margin="0,0,0,5"
+                                           Minimum="0" Maximum="100"/>
+
+                                <TextBlock x:Name="txtTrackStatus" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <TextBlock x:Name="txtStatusDetails" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+                                <Button Content="📊 View Status Details" Width="150" Height="30"
+                                        Click="BtnTrackStatus_Click" HorizontalAlignment="Center"
+                                        Background="#3498DB" Foreground="White"/>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Coordinator Tab -->
+            <TabItem Header="👨‍💼 Programme Coordinator">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Pending Claims for Approval" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                        <!-- Coordinator Actions -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Right">
+                            <Button Content="🔄 Refresh" Width="100" Height="30"
+                                    Click="BtnRefreshClaims_Click" Background="#3498DB" Foreground="White"/>
+                            <Button Content="📊 Export CSV" Width="100" Height="30"
+                                    Click="BtnExportCSV_Click" Background="#16A085" Foreground="White"/>
+                        </StackPanel>
+
+                        <DataGrid x:Name="dgPendingClaims" Height="300" AutoGenerateColumns="False"
+                                  IsReadOnly="True" Margin="0,0,0,20">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Claim ID" Binding="{Binding ClaimId}" Width="80"/>
+                                <DataGridTextColumn Header="Lecturer ID" Binding="{Binding LecturerId}" Width="90"/>
+                                <DataGridTextColumn Header="Lecturer Name" Binding="{Binding LecturerName}" Width="150"/>
+                                <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="100"/>
+                                <DataGridTextColumn Header="Hours" Binding="{Binding TotalHours}" Width="70"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="150"/>
+                                <DataGridTextColumn Header="Documents" Binding="{Binding DocumentCount}" Width="80"/>
+                                <DataGridTextColumn Header="Submission Date" Binding="{Binding SubmissionDate, StringFormat=dd-MMM-yyyy}" Width="120"/>
+                                <DataGridTemplateColumn Header="Actions" Width="250">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="👁️ View" Margin="2" Padding="8,3"
+                                                        Background="#3498DB" Foreground="White" FontSize="10"
+                                                        Click="BtnViewClaimDetails_Click"/>
+                                                <Button Content="✅ Approve" Margin="2" Padding="8,3"
+                                                        Background="#27AE60" Foreground="White" FontSize="10"
+                                                        Click="BtnApproveClaim_Click"/>
+                                                <Button Content="❌ Reject" Margin="2" Padding="8,3"
+                                                        Background="#E74C3C" Foreground="White" FontSize="10"
+                                                        Click="BtnRejectClaim_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <TextBlock Text="Summary:" FontWeight="Bold" Margin="0,10,0,5"/>
+                        <TextBlock x:Name="txtCoordinatorSummary" Text="Pending claims will be displayed here"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- Academic Manager Tab -->
+            <TabItem Header="👨‍💼 Academic Manager">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <TextBlock Text="Final Approval Queue" FontSize="18" FontWeight="Bold" Margin="0,0,0,20"/>
+
+                        <!-- Manager Actions -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Right">
+                            <Button Content="🔄 Refresh" Width="100" Height="30"
+                                    Click="BtnRefreshManagerQueue_Click" Background="#3498DB" Foreground="White"/>
+                            <Button Content="📈 Generate Report" Width="130" Height="30"
+                                    Click="BtnGenerateReport_Click" Background="#9B59B6" Foreground="White"/>
+                        </StackPanel>
+
+                        <DataGrid x:Name="dgManagerApproval" Height="300" AutoGenerateColumns="False"
+                                  IsReadOnly="True" Margin="0,0,0,20">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Claim ID" Binding="{Binding ClaimId}" Width="80"/>
+                                <DataGridTextColumn Header="Lecturer Name" Binding="{Binding LecturerName}" Width="150"/>
+                                <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="100"/>
+                                <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat=C}" Width="100"/>
+                                <DataGridTextColumn Header="Coordinator" Binding="{Binding CoordinatorName}" Width="120"/>
+                                <DataGridTextColumn Header="Coord Status" Binding="{Binding CoordinatorStatus}" Width="100"/>
+                                <DataGridTextColumn Header="Final Status" Binding="{Binding FinalStatus}" Width="140"/>
+                                <DataGridTextColumn Header="Submission Date" Binding="{Binding SubmissionDate, StringFormat=dd-MMM-yyyy}" Width="120"/>
+                                <DataGridTemplateColumn Header="Actions" Width="280">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="👁️ Details" Margin="2" Padding="8,3"
+                                                        Background="#3498DB" Foreground="White" FontSize="10"
+                                                        Click="BtnViewManagerDetails_Click"/>
+                                                <Button Content="✅ Final Approve" Margin="2" Padding="8,3"
+                                                        Background="#27AE60" Foreground="White" FontSize="10"
+                                                        Click="BtnFinalApprove_Click"/>
+                                                <Button Content="↩️ Return" Margin="2" Padding="8,3"
+                                                        Background="#E67E22" Foreground="White" FontSize="10"
+                                                        Click="BtnReturnClaim_Click"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <GroupBox Header="📊 Quick Statistics">
+                            <StackPanel>
+                                <TextBlock Text="Queue Statistics:" FontWeight="Bold" Margin="0,0,0,5"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Total in Queue:" FontWeight="SemiBold" Margin="0,0,5,0"/>
+                                    <TextBlock x:Name="txtTotalInQueue" Text="0"/>
+                                    <TextBlock Text=" | " Margin="10,0,10,0"/>
+                                    <TextBlock Text="Approved:" FontWeight="SemiBold" Margin="0,0,5,0"/>
+                                    <TextBlock x:Name="txtApprovedCount" Text="0"/>
+                                    <TextBlock Text=" | " Margin="10,0,10,0"/>
+                                    <TextBlock Text="Pending:" FontWeight="SemiBold" Margin="0,0,5,0"/>
+                                    <TextBlock x:Name="txtPendingCount" Text="0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="2" Background="#F8F9FA" BorderThickness="1,1,0,0" BorderBrush="#CCCCCC">
+            <StatusBarItem>
+                <TextBlock x:Name="txtStatus" Text="System Ready - Welcome to Contract Monthly Claim System"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock Text="CMCS v2.0 | © 2024 IIE Institution"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
